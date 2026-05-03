@@ -5,79 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IAA Gender & Counseling Support System</title>
-
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
-    <link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Orbitron:wght@500&display=swap"
-        rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#061a3d">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="logo.jpg">
-
-    <script>
-        // Kuanzisha Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('App imesajiliwa kikamilifu!');
-                }).catch(err => {
-                    console.log('Usajili umeshindwa!', err);
-                });
-            });
-        }
-
-        // SECURITY: SCREENSHOT & PROTECTION LOGIC
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'PrintScreen' || e.keyCode === 44) {
-                stopCapture();
-            }
-        });
-
-        function stopCapture() {
-            // Inafanya kioo kuwa cheupe na kutoa alert
-            document.body.style.filter = "brightness(100)";
-            document.body.style.background = "white";
-            alert("SECURITY ALERT: Screenshots haziruhusiwi kwenye mfumo huu!");
-            setTimeout(() => {
-                location.reload();
-            }, 500);
-        }
-
-        // Kuzuia Right Click na Keyboard Shortcuts
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u' || (e.shiftKey && e.key === 'I'))) {
-                e.preventDefault();
-                return false;
-            }
-        });
-    </script>
+    
+    <!-- Mbinu ya kuficha maudhui wakati wa Print -->
     <style>
+        @media print { body { display: none !important; } }
+        
         :root {
             --glass: rgba(255, 255, 255, 0.1);
-            --glass-thick: rgba(255, 255, 255, 0.15);
-            --border: rgba(255, 255, 255, 0.2);
             --primary: #00d2ff;
-            --secondary: #9d50bb;
-            --accent: #ff4d4d;
-            --success: #38ef7d;
         }
 
-        /* ANTI-SCREENSHOT CSS */
-        @media print {
-            body { display: none !important; }
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            /* Kuzuia ku-highlight maandishi */
-            -webkit-user-select: none;
-            user-select: none;
+        /* Hali ya usalama (White-out) */
+        .secure-mode {
+            filter: brightness(100) !important;
+            background: white !important;
+            pointer-events: none !important;
         }
 
         body {
@@ -85,424 +27,76 @@
             font-family: 'Poppins', sans-serif;
             color: white;
             min-height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
-            overflow-x: hidden;
-            transition: filter 0.2s ease;
-        }
-
-        #lockOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #061a3d, #1e3c72);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(20px);
-        }
-
-        .lock-box {
-            background: var(--glass);
-            border: 1px solid var(--border);
-            padding: 30px;
-            border-radius: 30px;
-            text-align: center;
-            width: 95%;
-            max-width: 450px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: white;
-            margin-bottom: 15px;
-            border: 2px solid var(--primary);
-            object-fit: cover;
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .id-badge {
-            background: var(--primary);
-            color: #061a3d;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-family: 'Orbitron';
-            margin: 20px 0;
-            display: inline-block;
-            letter-spacing: 2px;
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        .blob {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(var(--primary), var(--secondary));
-            filter: blur(80px);
-            border-radius: 50%;
-            z-index: -1;
-            animation: move 20s infinite alternate;
-        }
-
-        @keyframes move {
-            from { transform: translate(-50px, -50px); }
-            to { transform: translate(150px, 150px); }
+            transition: filter 0.1s ease;
         }
 
         .container {
-            width: 100%;
+            width: 90%;
             max-width: 500px;
             background: var(--glass);
-            backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid var(--border);
-            border-radius: 30px;
+            backdrop-filter: blur(20px);
             padding: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            color: var(--primary);
-            letter-spacing: 1px;
-            line-height: 1.4;
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 5px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px 5px;
-            text-align: center;
-            font-size: 9px;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 12px;
-            transition: 0.3s;
-            opacity: 0.6;
-        }
-
-        .tab.active {
-            background: var(--primary);
-            color: #061a3d;
-            opacity: 1;
-        }
-
-        .content-section {
-            display: none;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        label {
-            display: block;
-            margin: 15px 0 5px 5px;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--primary);
-        }
-
-        select, textarea, input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            color: white;
-            outline: none;
-            font-size: 13px;
-        }
-
-        .btn {
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-            border: none;
-            padding: 14px;
-            width: 100%;
-            border-radius: 15px;
-            color: white;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            filter: brightness(1.2);
-            transform: translateY(-2px);
-        }
-
-        .chat-container {
-            height: 350px;
-            background: rgba(0, 0, 0, 0.2);
             border-radius: 20px;
-            padding: 15px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .message {
-            max-width: 85%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-size: 12px;
-            line-height: 1.4;
-            position: relative;
-        }
-
-        .msg-office {
-            align-self: flex-start;
-            background: var(--glass-thick);
-            color: var(--primary);
-            border-bottom-left-radius: 2px;
-        }
-
-        .msg-student {
-            align-self: flex-end;
-            background: var(--primary);
-            color: #061a3d;
-            border-bottom-right-radius: 2px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
     </style>
+
+    <script>
+        // 1. Mbinu ya White-out: Inafanya screen iwe nyeupe mtumiaji akigusa vitufe vya screenshot
+        function activateSecurity() {
+            document.body.classList.add('secure-mode');
+        }
+
+        function deactivateSecurity() {
+            // Inarudisha screen baada ya sekunde chache
+            setTimeout(() => {
+                document.body.classList.remove('secure-mode');
+            }, 1000);
+        }
+
+        // Wakati mtumiaji anabonyeza vitufe vya screenshot, simu hupoteza "focus" kwenye kivinjari
+        window.addEventListener('blur', activateSecurity);
+        window.addEventListener('focus', deactivateSecurity);
+
+        // Kuzuia Right Click na Long Press kwenye simu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Kuzuia Shortcuts za PC (Ctrl+S, Ctrl+P, nk)
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.key === 'p' || e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+                activateSecurity();
+            }
+        });
+    </script>
 </head>
 
 <body>
-    <div id="lockOverlay">
-        <div class="lock-box">
-            <img src="logo.jpg" alt="IAA Logo" class="header-logo">
-            <h2 style="font-family: Orbitron; color: var(--primary); font-size: 16px;">HIGH SECURITY ACCESS</h2>
-            <p style="font-size: 10px; margin-bottom: 20px; opacity: 0.8;">IAA Gender & Counseling Support System</p>
-
-            <div id="choiceUI">
-                <p style="font-size: 12px; margin-bottom: 20px;">Karibu. Tafadhali thibitisha utambulisho wako kuendelea.</p>
-                <button class="btn" onclick="showReturningUI()">NINA JINA LA SIRI</button>
-                <button class="btn" style="background: transparent; border: 1px solid var(--primary);"
-                    onclick="generateNewIdentity()">MIMI NI MGENI (TENGENEZA KODI)</button>
-            </div>
-
-            <div id="firstTimeUI" class="hidden">
-                <p style="font-size: 11px; margin-top: 10px;">Hili ni jina lako la siri. **LIHIFADHI SASA**, utalitumia
-                    kuingia kila mara.</p>
-                <div class="id-badge" id="generatedIDDisplay">...</div>
-                <button class="btn" onclick="confirmIdentity()">NIMEHIFADHI, INGIA</button>
-            </div>
-
-            <div id="returningUI" class="hidden">
-                <p style="font-size: 11px;">Ingiza Jina lako la Siri (ANON-XXXX) kuingia.</p>
-                <input type="text" id="returningIDInput" placeholder="ANON-..."
-                    style="text-align: center; margin-top: 15px; text-transform: uppercase; font-family: Orbitron;">
-                <button class="btn" onclick="verifyReturningID()">INGIA KWENYE MFUMO</button>
-                <button class="btn" style="background:none; font-size: 10px; margin-top: 10px;"
-                    onclick="backToChoice()">RUDI NYUMA</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="blob"></div>
-
-    <div class="container hidden" id="mainApp">
-        <div class="header">
-            <img src="logo.jpg" alt="Logo"
-                style="width: 50px; height: 50px; border-radius: 50%; background: white; margin-bottom: 8px; border: 1px solid var(--primary);">
-            <h1>IAA GENDER & COUNSELING SYSTEM</h1>
-            <p style="font-size: 8px; opacity: 0.7; letter-spacing: 1px;">PRIVACY • SUPPORT • SAFETY</p>
+    <!-- App yako hapa -->
+    <div class="container" id="mainApp">
+        <h2 style="text-align: center; color: var(--primary);">IAA SECURE SYSTEM</h2>
+        <p style="font-size: 12px; text-align: center;">Maudhui haya yamelindwa. Ukijaribu kuscreenshot, kioo kitakuwa cheupe.</p>
+        
+        <hr style="opacity: 0.2; margin: 20px 0;">
+        
+        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px;">
+            <p><strong>Taarifa ya Siri:</strong> Maelezo haya hayawezi kuonekana kwenye picha ya screenshot (itakuwa nyeupe tupu).</p>
         </div>
 
-        <div class="nav-tabs">
-            <div class="tab active" onclick="switchView('reportView', this)">RIPOTI TUKIO</div>
-            <div class="tab" onclick="switchView('suggestView', this)">MAONI</div>
-            <div class="tab" onclick="switchView('chatView', this)">LIVE CHAT</div>
-        </div>
-
-        <div id="reportView" class="content-section active">
-            <label>Aina ya Tukio</label>
-            <select id="reportCategory">
-                <option value="Unyanyasaji wa Kijinsia">Unyanyasaji wa Kijinsia</option>
-                <option value="Rushwa ya Ngono/Fedha">Rushwa ya Ngono / Fedha</option>
-                <option value="Uonevu (Bullying)">Uonevu (Bullying)</option>
-                <option value="Vinginevyo">Vinginevyo</option>
-            </select>
-            <textarea id="reportDesc" placeholder="Elezea tukio kwa usiri mkubwa hapa..."
-                style="height: 150px; margin-top: 15px;"></textarea>
-            <button class="btn" onclick="submitReport()">🚀 WASILISHA RIPOTI</button>
-        </div>
-
-        <div id="suggestView" class="content-section">
-            <label>Ofisi Husika</label>
-            <select id="suggestTarget">
-                <option value="Social Welfare">Social Welfare Office</option>
-                <option value="Gender Desk">Gender Desk</option>
-            </select>
-            <textarea id="suggestContent" placeholder="Andika maoni au ushauri wako hapa..."
-                style="height: 150px; margin-top: 15px;"></textarea>
-            <button class="btn" onclick="submitSuggestion()"
-                style="background: linear-gradient(90deg, #11998e, #38ef7d);">💡 TUMA MAONI</button>
-        </div>
-
-        <div id="chatView" class="content-section">
-            <div class="chat-container" id="chatDisplay"></div>
-            <div style="display:flex; gap:10px; margin-top: 15px;">
-                <textarea id="chatMessage" placeholder="Andika ujumbe..." style="height: 55px;"></textarea>
-                <button class="btn" onclick="sendMessage()" style="width:65px; margin:0; font-size: 20px;">✈️</button>
-            </div>
-        </div>
+        <button onclick="location.reload()" style="width: 100%; margin-top: 20px; padding: 10px; border-radius: 10px; border: none; background: var(--primary); font-weight: bold;">RUDISHA KIOO</button>
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcQavkMpgtVEGMoc1nUMLwfeutkCS13ZiSYOPy5AlRBMPNWSFf3HkzJKRewNaX-xctyw/exec";
-        let anonId = localStorage.getItem('iaa_welfare_id');
-        let sessionVerified = sessionStorage.getItem('is_auth');
-
-        // SECURITY: Ficha kioo kikiwa hakina focus (Huzuia Screen Recording/Switching)
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                document.body.style.display = 'none';
-                sessionStorage.removeItem('is_auth');
-                location.reload();
-            }
-        });
-
-        function showReturningUI() {
-            document.getElementById('choiceUI').classList.add('hidden');
-            document.getElementById('returningUI').classList.remove('hidden');
-        }
-
-        function backToChoice() {
-            document.getElementById('returningUI').classList.add('hidden');
-            document.getElementById('choiceUI').classList.remove('hidden');
-        }
-
-        function generateNewIdentity() {
-            const newID = 'ANON-' + Math.random().toString(36).substring(2, 6).toUpperCase() + Math.floor(1000 + Math.random() * 9000);
-            document.getElementById('choiceUI').classList.add('hidden');
-            document.getElementById('firstTimeUI').classList.remove('hidden');
-            document.getElementById('generatedIDDisplay').innerText = newID;
-            tempID = newID;
-        }
-
-        let tempID = "";
-        function confirmIdentity() {
-            localStorage.setItem('iaa_welfare_id', tempID);
-            anonId = tempID;
-            sessionStorage.setItem('is_auth', 'true');
-            openApp();
-        }
-
-        function verifyReturningID() {
-            const input = document.getElementById('returningIDInput').value.trim().toUpperCase();
-            if (input === anonId && anonId !== null) {
-                sessionStorage.setItem('is_auth', 'true');
-                openApp();
-            } else {
-                alert("KODI SI SAHIHI!");
-            }
-        }
-
-        function openApp() {
-            document.getElementById('lockOverlay').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            loadMessages();
-        }
-
-        window.onload = () => {
-            if (sessionVerified === 'true' && anonId) openApp();
-        };
-
-        function switchView(viewId, tabElem) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tabElem.classList.add('active');
-            document.querySelectorAll('.content-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-            if (viewId === 'chatView') loadMessages();
-        }
-
-        async function submitReport() {
-            const desc = document.getElementById('reportDesc').value;
-            if (!desc) return alert("Weka maelezo.");
-            try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'sendReport', anonId, category: document.getElementById('reportCategory').value, desc }) });
-                alert("Ripoti imetumwa!");
-                document.getElementById('reportDesc').value = "";
-            } catch (e) { alert("Error!"); }
-        }
-
-        async function submitSuggestion() {
-            const content = document.getElementById('suggestContent').value;
-            if (!content) return alert("Weka maoni.");
-            try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'sendSuggestion', target: document.getElementById('suggestTarget').value, content }) });
-                alert("Asante!");
-                document.getElementById('suggestContent').value = "";
-            } catch (e) { alert("Error!"); }
-        }
-
-        async function sendMessage() {
-            const msgInput = document.getElementById('chatMessage');
-            const msg = msgInput.value.trim();
-            if (!msg) return;
-            try {
-                await fetch(APPS_SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'sendMessage', anonId, alias: anonId, message: msg }) });
-                msgInput.value = "";
-                loadMessages();
-            } catch (e) {}
-        }
-
-        async function loadMessages() {
-            const display = document.getElementById('chatDisplay');
-            try {
-                const res = await fetch(`${APPS_SCRIPT_URL}?action=getMessages&anonId=${anonId}`);
-                const messages = await res.json();
-                if (!messages || messages.length === 0) {
-                    display.innerHTML = `<div style="text-align:center; opacity:0.5; font-size:11px; margin-top:100px;">Anza mazungumzo...</div>`;
-                    return;
-                }
-                display.innerHTML = messages.map(m => `
-                    <div class="message ${m.sender === 'Ofisi' ? 'msg-office' : 'msg-student'}">
-                        <small style="font-weight:600; display:block; margin-bottom:3px; font-size:10px;">${m.sender === 'Ofisi' ? '🛡️ Ofisi' : 'Mimi'}</small>
-                        ${m.message}
-                    </div>
-                `).join('');
-                display.scrollTop = display.scrollHeight;
-            } catch (e) { }
-        }
-
-        setInterval(() => { if (!document.getElementById('chatView').classList.contains('hidden')) loadMessages(); }, 5000);
+        // Ikiwa unataka kuzuia kabisa kwenye Android App (Webview), 
+        // utahitaji kuongeza kodi hii kwenye upande wa Android Studio (Java/Kotlin):
+        // getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     </script>
 </body>
+
 </html>
